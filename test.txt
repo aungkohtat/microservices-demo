@@ -1,0 +1,796 @@
+Name:                   adservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:21 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=adservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=adservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/adservice:v0.9.0
+    Port:       9555/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     300m
+      memory:  300Mi
+    Requests:
+      cpu:      200m
+      memory:   180Mi
+    Liveness:   grpc <pod>:9555  delay=20s timeout=1s period=15s #success=1 #failure=3
+    Readiness:  grpc <pod>:9555  delay=20s timeout=1s period=15s #success=1 #failure=3
+    Environment:
+      PORT:  9555
+    Mounts:  <none>
+  Volumes:   <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   adservice-cf48dc6df (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m34s  deployment-controller  Scaled up replica set adservice-cf48dc6df to 1
+
+
+Name:                   cartservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:19 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=cartservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=cartservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/cartservice:v0.9.0
+    Port:       7070/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     300m
+      memory:  128Mi
+    Requests:
+      cpu:      200m
+      memory:   64Mi
+    Liveness:   grpc <pod>:7070  delay=15s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  grpc <pod>:7070  delay=15s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      REDIS_ADDR:  redis-cart:6379
+    Mounts:        <none>
+  Volumes:         <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   cartservice-657b544cf4 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m37s  deployment-controller  Scaled up replica set cartservice-657b544cf4 to 1
+
+
+Name:                   checkoutservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:15 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=checkoutservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=checkoutservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/checkoutservice:v0.9.0
+    Port:       5050/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:      100m
+      memory:   64Mi
+    Liveness:   grpc <pod>:5050  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  grpc <pod>:5050  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      PORT:                          5050
+      PRODUCT_CATALOG_SERVICE_ADDR:  productcatalogservice:3550
+      SHIPPING_SERVICE_ADDR:         shippingservice:50051
+      PAYMENT_SERVICE_ADDR:          paymentservice:50051
+      EMAIL_SERVICE_ADDR:            emailservice:5000
+      CURRENCY_SERVICE_ADDR:         currencyservice:7000
+      CART_SERVICE_ADDR:             cartservice:7070
+    Mounts:                          <none>
+  Volumes:                           <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   checkoutservice-7644b45df9 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m41s  deployment-controller  Scaled up replica set checkoutservice-7644b45df9 to 1
+
+
+Name:                   currencyservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:20 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=currencyservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=currencyservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/currencyservice:v0.9.0
+    Port:       7000/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:      100m
+      memory:   64Mi
+    Liveness:   grpc <pod>:7000  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  grpc <pod>:7000  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      PORT:              7000
+      DISABLE_PROFILER:  1
+    Mounts:              <none>
+  Volumes:               <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   currencyservice-7df78c99 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m37s  deployment-controller  Scaled up replica set currencyservice-7df78c99 to 1
+
+
+Name:                   details-v1
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 05:08:49 +0000
+Labels:                 app=details
+                        version=v1
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=details,version=v1
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=details
+                    version=v1
+  Service Account:  bookinfo-details
+  Containers:
+   details:
+    Image:        docker.io/istio/examples-bookinfo-details-v1:1.18.0
+    Port:         9080/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   details-v1-698d88b (1/1 replicas created)
+Events:          <none>
+
+
+Name:                   emailservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:14 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=emailservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=emailservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/emailservice:v0.9.0
+    Port:       8080/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:      100m
+      memory:   64Mi
+    Liveness:   grpc <pod>:8080  delay=0s timeout=1s period=5s #success=1 #failure=3
+    Readiness:  grpc <pod>:8080  delay=0s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      PORT:              8080
+      DISABLE_PROFILER:  1
+    Mounts:              <none>
+  Volumes:               <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   emailservice-5855bdc465 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m44s  deployment-controller  Scaled up replica set emailservice-5855bdc465 to 1
+
+
+Name:                   frontend
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:16 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=frontend
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=frontend
+  Annotations:      sidecar.istio.io/rewriteAppHTTPProbers: true
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/frontend:v0.9.0
+    Port:       8080/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:      100m
+      memory:   64Mi
+    Liveness:   http-get http://:8080/_healthz delay=10s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:8080/_healthz delay=10s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      PORT:                          8080
+      PRODUCT_CATALOG_SERVICE_ADDR:  productcatalogservice:3550
+      CURRENCY_SERVICE_ADDR:         currencyservice:7000
+      CART_SERVICE_ADDR:             cartservice:7070
+      RECOMMENDATION_SERVICE_ADDR:   recommendationservice:8080
+      SHIPPING_SERVICE_ADDR:         shippingservice:50051
+      CHECKOUT_SERVICE_ADDR:         checkoutservice:5050
+      AD_SERVICE_ADDR:               adservice:9555
+      ENABLE_PROFILER:               0
+    Mounts:                          <none>
+  Volumes:                           <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   frontend-695bcc595f (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m42s  deployment-controller  Scaled up replica set frontend-695bcc595f to 1
+
+
+Name:                   loadgenerator
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:19 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=loadgenerator
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=loadgenerator
+  Annotations:      sidecar.istio.io/rewriteAppHTTPProbers: true
+  Service Account:  default
+  Init Containers:
+   frontend-check:
+    Image:      busybox:latest
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      /bin/sh
+      -exc
+      echo "Init container pinging frontend: ${FRONTEND_ADDR}..."
+      STATUSCODE=$(wget --server-response http://${FRONTEND_ADDR} 2>&1 | awk '/^  HTTP/{print $2}')
+      if test $STATUSCODE -ne 200; then
+          echo "Error: Could not reach frontend - Status code: ${STATUSCODE}"
+          exit 1
+      fi
+      
+    Environment:
+      FRONTEND_ADDR:  frontend:80
+    Mounts:           <none>
+  Containers:
+   main:
+    Image:      gcr.io/google-samples/microservices-demo/loadgenerator:v0.9.0
+    Port:       <none>
+    Host Port:  <none>
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+      cpu:     300m
+      memory:  256Mi
+    Environment:
+      FRONTEND_ADDR:  frontend:80
+      USERS:          10
+    Mounts:           <none>
+  Volumes:            <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   loadgenerator-788d5978c4 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m40s  deployment-controller  Scaled up replica set loadgenerator-788d5978c4 to 1
+
+
+Name:                   paymentservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:17 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=paymentservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=paymentservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/paymentservice:v0.9.0
+    Port:       50051/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:      100m
+      memory:   64Mi
+    Liveness:   grpc <pod>:50051  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  grpc <pod>:50051  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      PORT:              50051
+      DISABLE_PROFILER:  1
+    Mounts:              <none>
+  Volumes:               <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   paymentservice-57f58b8dc7 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m42s  deployment-controller  Scaled up replica set paymentservice-57f58b8dc7 to 1
+
+
+Name:                   productcatalogservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:18 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=productcatalogservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=productcatalogservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/productcatalogservice:v0.9.0
+    Port:       3550/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:      100m
+      memory:   64Mi
+    Liveness:   grpc <pod>:3550  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  grpc <pod>:3550  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:
+      PORT:              3550
+      DISABLE_PROFILER:  1
+    Mounts:              <none>
+  Volumes:               <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   productcatalogservice-5b9d97869f (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m42s  deployment-controller  Scaled up replica set productcatalogservice-5b9d97869f to 1
+
+
+Name:                   productpage-v1
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 05:08:53 +0000
+Labels:                 app=productpage
+                        version=v1
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=productpage,version=v1
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=productpage
+                    version=v1
+  Annotations:      prometheus.io/path: /metrics
+                    prometheus.io/port: 9080
+                    prometheus.io/scrape: true
+  Service Account:  bookinfo-productpage
+  Containers:
+   productpage:
+    Image:        docker.io/istio/examples-bookinfo-productpage-v1:1.18.0
+    Port:         9080/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:
+      /tmp from tmp (rw)
+  Volumes:
+   tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   productpage-v1-675fc69cf (1/1 replicas created)
+Events:          <none>
+
+
+Name:                   ratings-v1
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 05:08:50 +0000
+Labels:                 app=ratings
+                        version=v1
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=ratings,version=v1
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=ratings
+                    version=v1
+  Service Account:  bookinfo-ratings
+  Containers:
+   ratings:
+    Image:        docker.io/istio/examples-bookinfo-ratings-v1:1.18.0
+    Port:         9080/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   ratings-v1-6484c4d9bb (1/1 replicas created)
+Events:          <none>
+
+
+Name:                   recommendationservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:16 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=recommendationservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=recommendationservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/recommendationservice:v0.9.0
+    Port:       8080/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  450Mi
+    Requests:
+      cpu:      100m
+      memory:   220Mi
+    Liveness:   grpc <pod>:8080  delay=0s timeout=1s period=5s #success=1 #failure=3
+    Readiness:  grpc <pod>:8080  delay=0s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      PORT:                          8080
+      PRODUCT_CATALOG_SERVICE_ADDR:  productcatalogservice:3550
+      DISABLE_PROFILER:              1
+    Mounts:                          <none>
+  Volumes:                           <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   recommendationservice-7f9cff7b77 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m45s  deployment-controller  Scaled up replica set recommendationservice-7f9cff7b77 to 1
+
+
+Name:                   redis-cart
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:21 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=redis-cart
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=redis-cart
+  Containers:
+   redis:
+    Image:      redis:alpine
+    Port:       6379/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     125m
+      memory:  256Mi
+    Requests:
+      cpu:        70m
+      memory:     200Mi
+    Liveness:     tcp-socket :6379 delay=0s timeout=1s period=5s #success=1 #failure=3
+    Readiness:    tcp-socket :6379 delay=0s timeout=1s period=5s #success=1 #failure=3
+    Environment:  <none>
+    Mounts:
+      /data from redis-data (rw)
+  Volumes:
+   redis-data:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   redis-cart-bf5c68f69 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m41s  deployment-controller  Scaled up replica set redis-cart-bf5c68f69 to 1
+
+
+Name:                   reviews-v1
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 05:08:51 +0000
+Labels:                 app=reviews
+                        version=v1
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=reviews,version=v1
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=reviews
+                    version=v1
+  Service Account:  bookinfo-reviews
+  Containers:
+   reviews:
+    Image:      docker.io/istio/examples-bookinfo-reviews-v1:1.18.0
+    Port:       9080/TCP
+    Host Port:  0/TCP
+    Environment:
+      LOG_DIR:  /tmp/logs
+    Mounts:
+      /opt/ibm/wlp/output from wlp-output (rw)
+      /tmp from tmp (rw)
+  Volumes:
+   wlp-output:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+   tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   reviews-v1-5b5d6494f4 (1/1 replicas created)
+Events:          <none>
+
+
+Name:                   reviews-v2
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 05:08:51 +0000
+Labels:                 app=reviews
+                        version=v2
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=reviews,version=v2
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=reviews
+                    version=v2
+  Service Account:  bookinfo-reviews
+  Containers:
+   reviews:
+    Image:      docker.io/istio/examples-bookinfo-reviews-v2:1.18.0
+    Port:       9080/TCP
+    Host Port:  0/TCP
+    Environment:
+      LOG_DIR:  /tmp/logs
+    Mounts:
+      /opt/ibm/wlp/output from wlp-output (rw)
+      /tmp from tmp (rw)
+  Volumes:
+   wlp-output:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+   tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   reviews-v2-5b667bcbf8 (1/1 replicas created)
+Events:          <none>
+
+
+Name:                   reviews-v3
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 05:08:52 +0000
+Labels:                 app=reviews
+                        version=v3
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=reviews,version=v3
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=reviews
+                    version=v3
+  Service Account:  bookinfo-reviews
+  Containers:
+   reviews:
+    Image:      docker.io/istio/examples-bookinfo-reviews-v3:1.18.0
+    Port:       9080/TCP
+    Host Port:  0/TCP
+    Environment:
+      LOG_DIR:  /tmp/logs
+    Mounts:
+      /opt/ibm/wlp/output from wlp-output (rw)
+      /tmp from tmp (rw)
+  Volumes:
+   wlp-output:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+   tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     
+    SizeLimit:  <unset>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   reviews-v3-5b9bd44f4 (1/1 replicas created)
+Events:          <none>
+
+
+Name:                   shippingservice
+Namespace:              default
+CreationTimestamp:      Thu, 18 Jan 2024 08:31:20 +0000
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=shippingservice
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app=shippingservice
+  Service Account:  default
+  Containers:
+   server:
+    Image:      gcr.io/google-samples/microservices-demo/shippingservice:v0.9.0
+    Port:       50051/TCP
+    Host Port:  0/TCP
+    Limits:
+      cpu:     200m
+      memory:  128Mi
+    Requests:
+      cpu:      100m
+      memory:   64Mi
+    Liveness:   grpc <pod>:50051  delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:  grpc <pod>:50051  delay=0s timeout=1s period=5s #success=1 #failure=3
+    Environment:
+      PORT:              50051
+      DISABLE_PROFILER:  1
+    Mounts:              <none>
+  Volumes:               <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   shippingservice-7556967db5 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  6m44s  deployment-controller  Scaled up replica set shippingservice-7556967db5 to 1
